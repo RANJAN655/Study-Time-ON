@@ -1,0 +1,159 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+body {
+  margin: 0;
+  background: #000;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  user-select: none;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 100px;
+  margin: 0 auto;
+}
+
+/* TIMER */
+.timer {
+  font-size: 90px;
+  text-align: center;
+  letter-spacing: 4px;
+  margin-bottom: 40px;
+}
+
+/* TRACK */
+.track {
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* LINE */
+.line {
+  position: relative;
+  height: 4px;
+  background: #222;
+}
+
+.fill {
+  height: 100%;
+  background: #fff;
+  transition: width 1s linear;
+}
+
+/* STUDENT ICON */
+.student {
+  position: absolute;
+  top: -20px;
+  transform: translateX(-50%);
+  font-size: 20px;
+  transition: left 1s linear;
+}
+
+/* BLOCKS */
+.blocks {
+  width: 100%;
+  display: flex;
+  /* justify-content: space-between; */
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.block {
+  width: 12%;
+  height: 6px;
+  background: #333;
+}
+
+.blocks.active {
+  background: #fff;
+}
+
+/* CONTROLS */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 50px;
+}
+
+button {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* DAILY TEXT */
+.daily {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+/* PERSON SMOOTH MOVE */
+.student {
+  position: absolute;
+  top: -25px;
+  transform: translateX(-50%);
+  transition: left 1s linear;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.student-label {
+  font-size: 10px;
+  opacity: 0.7;
+  margin-bottom: 2px;
+}
+.blocks-info {
+    margin-top: 20px;
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.6;
+  margin-bottom: 8px;
+}
+/* STATS (Total + Today) */
+.total-timer {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+.total-timer div {
+  padding: 6px 12px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #111;
+}
+
+/* optional hover (subtle modern feel) */
+.total-timer div:hover {
+  border-color: #fff;
+}
