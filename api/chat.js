@@ -1,21 +1,23 @@
-import "dotenv/config";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ reply: "Method not allowed" });
-    console.log("KEY:", process.env.GEMINI_API_KEY);
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      return res.status(500).json({ reply: "API key missing" });
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
 
     const { message } = req.body;
 
-    if (!message) {
-      return res.status(400).json({
-        reply: "Message is required"
-      });
+    if (typeof message !== "string") {
+      return res.status(400).json({ reply: "Invalid message" });
     }
 
     const model = genAI.getGenerativeModel({
@@ -28,13 +30,10 @@ export default async function handler(req, res) {
       result.response?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "No response";
 
-    return res.status(200).json({ reply });
+    res.status(200).json({ reply });
 
   } catch (err) {
     console.error(err);
-
-    return res.status(500).json({
-      reply: err.message || "Something went wrong"
-    });
+    res.status(500).json({ reply: err.message });
   }
 }
