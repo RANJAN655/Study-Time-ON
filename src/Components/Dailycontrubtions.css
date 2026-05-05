@@ -238,8 +238,9 @@ html, body {
 @media (max-width: 768px) {
 
   .daily-time {
-    padding: 22px;
-    margin: 15px auto;
+    padding: 22px,30px;
+    margin: 10px;
+    width: 100vw;
   }
 
   .contribution-header {
@@ -251,7 +252,7 @@ html, body {
   }
 
   .time-display {
-    padding: 16px;
+    /* padding: 16px; */
   }
 
   .time-value {

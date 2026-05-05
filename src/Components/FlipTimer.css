@@ -214,13 +214,13 @@ button:active {
 @media (max-width: 768px) {
 
   .wrapper {
-    padding: 40px 15px;
+    padding: 100px;
   }
 
   .timer {
     font-size: 60px;
     letter-spacing: 2px;
-    margin-bottom: 25px;
+    /* margin-bottom: 25px; */
   }
 
   .track {
