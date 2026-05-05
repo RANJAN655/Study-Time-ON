@@ -1,0 +1,57 @@
+/* =========================
+   MOBILE RESPONSIVE (AI CHAT)
+========================= */
+
+@media (max-width: 768px) {
+
+  /* Floating button */
+  .ai-button {
+    width: 55px;
+    height: 55px;
+    font-size: 22px;
+    bottom: 15px;
+    right: 15px;
+  }
+
+  /* Chat window */
+  .ai-chat {
+    width: 92%;
+    height: 70vh;
+    right: 4%;
+    bottom: 80px;
+    border-radius: 10px;
+  }
+
+  /* Header */
+  .chat-header {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  /* Messages */
+  .chat-box {
+    padding: 8px;
+  }
+
+  .msg {
+    font-size: 13px;
+    padding: 6px;
+    max-width: 85%;
+  }
+
+  /* Input area */
+  .chat-input {
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .chat-input input {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .chat-input button {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}

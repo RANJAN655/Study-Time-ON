@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./FlipTimer.css";
 import DailyContributions from "./DailyContributions";
+import AIChat from "./AIChat";
+      
 
 const BLOCK_TIME = 30 * 60;
 const TOTAL_BLOCKS = 14;
@@ -137,6 +139,7 @@ const FlipTimer = () => {
         <div>Total: {formatDaily(totalSeconds)}</div>
         <div>Today-Total : {formatDaily(todaySeconds)}</div>
       </div>
+      <AIChat />
 
       {/* TRACK */}
       <div className="track">
