@@ -1,20 +1,31 @@
-import "dotenv/config";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
+  // ✅ debug (move here)
+  console.log("KEY:", process.env.GEMINI_API_KEY);
+
   if (req.method !== "POST") {
     return res.status(405).json({ reply: "Method not allowed" });
-    console.log("KEY:", process.env.GEMINI_API_KEY);
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    // ✅ explicit check
+    if (!apiKey) {
+      return res.status(500).json({
+        reply: "API key missing"
+      });
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
 
     const { message } = req.body;
 
-    if (!message) {
+    // ✅ strict validation
+    if (typeof message !== "string" || !message.trim()) {
       return res.status(400).json({
-        reply: "Message is required"
+        reply: "Valid message is required"
       });
     }
 
@@ -31,7 +42,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ reply });
 
   } catch (err) {
-    console.error(err);
+    console.error("API ERROR:", err);
 
     return res.status(500).json({
       reply: err.message || "Something went wrong"
