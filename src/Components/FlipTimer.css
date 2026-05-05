@@ -214,7 +214,7 @@ button:active {
 @media (max-width: 768px) {
 
   .wrapper {
-    padding: 50px;
+    padding: 40px 15px;
   }
 
   .timer {
