@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./FlipTimer.css";
+import DailyContributions from "./DailyContributions";
 
 const BLOCK_TIME = 30 * 60;
 const TOTAL_BLOCKS = 14;
@@ -19,6 +20,11 @@ const FlipTimer = () => {
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [blocks, setBlocks] = useState(0);
+  const [showDailyContributions, setShowDailyContributions] = useState(false);
+  const [history, setHistory] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem("studyHistory"));
+    return Array.isArray(saved) ? saved : [];
+  });
 
   // ✅ TODAY
   const [todaySeconds, setTodaySeconds] = useState(() => {
@@ -35,6 +41,8 @@ const FlipTimer = () => {
   const [totalSeconds, setTotalSeconds] = useState(() => {
     return Number(localStorage.getItem("studyTotal")) || 0;
   });
+
+  const [dailyContributions, setDailyContributions] = useState(0);
 
   // TIMER
   useEffect(() => {
@@ -74,6 +82,22 @@ const FlipTimer = () => {
     localStorage.setItem("studyTotal", totalSeconds);
   }, [totalSeconds]);
 
+  // SAVE HISTORY
+  useEffect(() => {
+    const today = getISTDate();
+    const historyEntry = { date: today, seconds: todaySeconds };
+    
+    setHistory((prev) => {
+      const updated = prev.filter((item) => item.date !== today);
+      return [historyEntry, ...updated];
+    });
+
+    localStorage.setItem("studyHistory", JSON.stringify([
+      historyEntry,
+      ...history.filter((item) => item.date !== today),
+    ]));
+  }, [todaySeconds]);
+
   const formatTime = (t) => {
     const h = String(Math.floor(t / 3600)).padStart(2, "0");
     const m = String(Math.floor((t % 3600) / 60)).padStart(2, "0");
@@ -88,13 +112,27 @@ const FlipTimer = () => {
   };
 
   const progress = Math.min((time / TOTAL_TIME) * 100, 100);
+  const dailyProgress = Math.min((todaySeconds / TOTAL_TIME) * 100, 100);
 
-  return (
-    <div className="wrapper">
-      {/* TIMER */}
-      <div className="timer">{formatTime(time)}</div>
+  const toggleRunning = () => {
+    setIsRunning((prev) => !prev);
+  };
 
-      {/* STATS */}
+  const content = showDailyContributions ? (
+ 
+  // <DailyContributions dailyContributions={dailyContributions} setDailyContributions={setDailyContributions} history={history} />
+  <DailyContributions 
+  dailyContributions={dailyContributions} 
+  setDailyContributions={setDailyContributions} 
+  history={history}
+  todaySeconds={todaySeconds}   // ✅ ADD THIS
+/>
+  ) : (
+    <>
+      <div className="timer" onClick={toggleRunning}>
+        {formatTime(time)}
+      </div>
+
       <div className="total-timer">
         <div>Total: {formatDaily(totalSeconds)}</div>
         <div>Today-Total : {formatDaily(todaySeconds)}</div>
@@ -144,6 +182,17 @@ const FlipTimer = () => {
           Reset
         </button>
       </div>
+    </>
+  );
+  return (
+    <div className="wrapper" style={{ position: "relative" }}>
+      <div style={{ position: "absolute", top: 12, left: 12, zIndex: 1 }}>
+        <button onClick={() => setShowDailyContributions((prev) => !prev)}>
+          {showDailyContributions ? "Hide " : "Monthly Record"}
+        </button>
+      </div>
+
+      {content}
     </div>
   );
 };

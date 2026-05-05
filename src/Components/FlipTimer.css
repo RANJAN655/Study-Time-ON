@@ -7,10 +7,11 @@ html, body {
 }
 body {
   margin: 0;
-  background: #000;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f0f1e 100%);
   color: #fff;
   font-family: "Inter", sans-serif;
   user-select: none;
+  min-height: 100vh;
 }
 
 .wrapper {
@@ -34,6 +35,18 @@ body {
   text-align: center;
   letter-spacing: 4px;
   margin-bottom: 40px;
+  background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5)); }
+  50% { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8)); }
 }
 
 /* TRACK */
@@ -47,13 +60,17 @@ body {
 .line {
   position: relative;
   height: 4px;
-  background: #222;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
 }
 
 .fill {
   height: 100%;
-  background: #fff;
+  background: linear-gradient(90deg, #00d4ff 0%, #0099ff 100%);
   transition: width 1s linear;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
 }
 
 /* STUDENT ICON */
@@ -69,7 +86,6 @@ body {
 .blocks {
   width: 100%;
   display: flex;
-  /* justify-content: space-between; */
   gap: 10px;
   margin-top: 15px;
 }
@@ -77,11 +93,19 @@ body {
 .block {
   width: 12%;
   height: 6px;
-  background: #333;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  transition: all 0.3s ease;
 }
 
-.blocks.active {
-  background: #fff;
+.block:hover {
+  background: rgba(0, 212, 255, 0.4);
+  transform: scaleY(1.5);
+}
+
+.blocks.active .block {
+  background: linear-gradient(90deg, #00d4ff 0%, #0099ff 100%);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
 }
 
 /* CONTROLS */
@@ -93,16 +117,28 @@ body {
 }
 
 button {
-  background: transparent;
-  border: 1px solid #fff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 153, 255, 0.1) 100%);
+  border: 2px solid rgba(0, 212, 255, 0.5);
   color: #fff;
-  padding: 10px 20px;
+  padding: 12px 28px;
   cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 button:hover {
-  background: #fff;
-  color: #000;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.3) 0%, rgba(0, 153, 255, 0.3) 100%);
+  border-color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 /* DAILY TEXT */
@@ -111,6 +147,8 @@ button:hover {
   margin-bottom: 30px;
   font-size: 18px;
   opacity: 0.8;
+  color: #b0c4ff;
+  font-weight: 500;
 }
 
 /* PERSON SMOOTH MOVE */
@@ -122,20 +160,29 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: rgba(0, 212, 255, 0.15);
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 212, 255, 0.4);
 }
 
 .student-label {
   font-size: 10px;
-  opacity: 0.7;
+  opacity: 0.9;
   margin-bottom: 2px;
+  color: #00d4ff;
+  font-weight: 600;
 }
+
 .blocks-info {
-    margin-top: 20px;
+  margin-top: 20px;
   text-align: center;
   font-size: 13px;
-  opacity: 0.6;
+  opacity: 0.7;
   margin-bottom: 8px;
+  color: #b0c4ff;
 }
+
 /* STATS (Total + Today) */
 .total-timer {
   display: flex;
@@ -143,17 +190,23 @@ button:hover {
   gap: 40px;
   margin-bottom: 30px;
   font-size: 16px;
-  opacity: 0.85;
+  opacity: 0.95;
 }
 
 .total-timer div {
-  padding: 6px 12px;
-  border: 1px solid #333;
-  border-radius: 6px;
-  background: #111;
+  padding: 16px 24px;
+  border: 2px solid rgba(0, 212, 255, 0.3);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 153, 255, 0.08) 100%);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #b0c4ff;
 }
 
-/* optional hover (subtle modern feel) */
 .total-timer div:hover {
-  border-color: #fff;
+  border-color: #00d4ff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 153, 255, 0.15) 100%);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  transform: translateY(-4px);
 }
