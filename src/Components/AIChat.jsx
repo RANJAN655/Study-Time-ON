@@ -7,117 +7,169 @@ const AIChat = () => {
   const [input, setInput] = useState("");
   const [listening, setListening] = useState(false);
 
-  const toggleChat = () => setIsOpen(!isOpen);
+  const toggleChat = () => {
+    setIsOpen(!isOpen);
+  };
 
-  // 🔊 AI Speak
+  // 🔊 Speak AI response
   const speak = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
+
     speechSynthesis.speak(utterance);
   };
 
-  // 🎤 Voice input (AUTO SEND)
+  // 🎤 Voice Recognition
   const startListening = () => {
     const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Browser not supported");
+      alert("Browser does not support voice recognition");
       return;
     }
 
     const recognition = new SpeechRecognition();
+
     recognition.lang = "en-US";
 
-    recognition.onstart = () => setListening(true);
-    recognition.onend = () => setListening(false);
+    recognition.onstart = () => {
+      setListening(true);
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+    };
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+      const transcript =
+        event.results[0][0].transcript;
 
-      // optional: show in input
       setInput(transcript);
 
-      // ✅ auto send
       sendMessage(transcript);
     };
 
     recognition.start();
   };
 
-  // 🤖 Send message (supports voice + input)
-  const sendMessage = async (voiceText) => {
-    const msg = voiceText || input;
-    if (!msg.trim()) return;
+  // 🤖 Send Message
+  const sendMessage = async (voiceText = "") => {
+    const msg = String(voiceText || input || "").trim();
 
-    const userMsg = { role: "user", text: msg };
+    if (!msg) return;
 
-    // show instantly
-    setMessages((prev) => [...prev, userMsg]);
+    // Add user message
+    const userMessage = {
+      role: "user",
+      text: msg,
+    };
+
+    setMessages((prev) => [
+      ...prev,
+      userMessage,
+    ]);
 
     setInput("");
 
     try {
+      console.log("Sending:", msg);
+
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: msg })
+        body: JSON.stringify({
+          message: msg,
+        }),
       });
 
+      console.log("Status:", res.status);
+
       const data = await res.json();
-      const reply = data.reply || "No response";
 
-      const botMsg = { role: "bot", text: reply };
+      console.log("Response:", data);
 
-      setMessages((prev) => [...prev, botMsg]);
+      const botReply =
+        data.reply || "No response from AI";
 
-      // 🔊 speak response
-      speak(reply);
-
-    } catch {
-      const err = "Error connecting server";
+      const botMessage = {
+        role: "bot",
+        text: botReply,
+      };
 
       setMessages((prev) => [
         ...prev,
-        { role: "bot", text: err }
+        botMessage,
       ]);
 
-      speak(err);
+      speak(botReply);
+
+    } catch (err) {
+      console.error("Frontend Error:", err);
+
+      const errorMessage =
+        "Error connecting server";
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: errorMessage,
+        },
+      ]);
+
+      speak(errorMessage);
     }
   };
 
   return (
     <>
-      {/* 🤖 Floating Button */}
-      <div className="ai-button" onClick={toggleChat}>
+      {/* Floating Button */}
+      <div
+        className="ai-button"
+        onClick={toggleChat}
+      >
         🤖
       </div>
 
       {/* Chat Window */}
       {isOpen && (
         <div className="ai-chat">
+
+          {/* Header */}
           <div className="chat-header">
             AI Assistant
-            <span onClick={toggleChat}>✖</span>
+
+            <span onClick={toggleChat}>
+              ✖
+            </span>
           </div>
 
+          {/* Messages */}
           <div className="chat-box">
-            {messages.map((m, i) => (
-              <div key={i} className={`msg ${m.role}`}>
-                {m.text}
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`msg ${msg.role}`}
+              >
+                {msg.text}
               </div>
             ))}
           </div>
 
+          {/* Input */}
           <div className="chat-input">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask something..."
 
-              // ✅ Enter to send
+            <input
+              type="text"
+              value={input}
+              placeholder="Ask something..."
+              onChange={(e) =>
+                setInput(e.target.value)
+              }
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
@@ -126,15 +178,18 @@ const AIChat = () => {
               }}
             />
 
-            {/* 🎤 Mic */}
+            {/* Mic Button */}
             <button onClick={startListening}>
               {listening ? "🎙️" : "🎤"}
             </button>
 
             {/* Send Button */}
-            <button onClick={sendMessage}>
+            <button
+              onClick={() => sendMessage()}
+            >
               Send
             </button>
+
           </div>
         </div>
       )}
